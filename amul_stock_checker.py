@@ -13,7 +13,7 @@ import os
 PRODUCTS = [
     {
         "name": "Amul Whey Protein, 32g | Pack of 60 Sachets",
-        "url": "https://shop.amul.com/en/product/amul-kool-protein-milkshake-or-kesar-180-ml-or-pack-of-8",
+        "url": "https://shop.amul.com/en/product/amul-whey-protein-32-g-or-pack-of-60-sachets",
     },
     {
         "name": "Amul Chocolate Whey Protein, 34g | Pack of 60 Sachets",
@@ -27,14 +27,18 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+                  "(KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Connection": "keep-alive",
 }
 
 
 def is_in_stock(url: str) -> bool:
     resp = requests.get(url, headers=HEADERS, timeout=15)
-    resp.raise_for_status()
     html = resp.text
+
+    print(f"DEBUG status={resp.status_code} length={len(html)} for {url}")
 
     # The page shows "Sold Out" near the buy button when unavailable,
     # and an active "Add to Cart" button when available.
@@ -43,7 +47,12 @@ def is_in_stock(url: str) -> bool:
     if "Add to Cart" in html:
         return True
 
-    print(f"Warning: could not determine stock status reliably for {url}", file=sys.stderr)
+    # Detection failed — print a snippet so we can see what was actually
+    # returned (e.g. a bot-protection / challenge page instead of the
+    # real product page).
+    snippet = html[:500].replace("\n", " ")
+    print(f"Warning: could not determine stock status reliably for {url}")
+    print(f"DEBUG snippet: {snippet}")
     return False
 
 
