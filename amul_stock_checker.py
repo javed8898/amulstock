@@ -13,7 +13,7 @@ import os
 PRODUCTS = [
     {
         "name": "Amul Whey Protein, 32g | Pack of 60 Sachets",
-        "url": "https://shop.amul.com/en/product/amul-whey-protein-32-g-or-pack-of-60-sachets",
+        "url": "https://shop.amul.com/en/product/amul-kool-protein-milkshake-or-kesar-180-ml-or-pack-of-8",
     },
     {
         "name": "Amul Chocolate Whey Protein, 34g | Pack of 60 Sachets",
